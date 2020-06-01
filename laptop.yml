@@ -76,6 +76,7 @@
       - libavcodec-dev
       - lame
       - neofetch
+      - indicator-multiload
 
   - name: Install snaps
     snap:
