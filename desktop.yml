@@ -36,6 +36,9 @@
       state: present
     become: true
     loop:
+      - snapcraft
+      - multipass
+      - lxd
       - cherrytree
 
   # - name: Add Nextcloud repository
