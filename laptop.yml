@@ -1,4 +1,4 @@
-# Configuration for laptop
+# Configuration for laptop (Ubuntu 20.04)
 # Run with ansible-playbook ~/projects/configure-system/laptop.yml --ask-become-pass
 
 ---
@@ -10,6 +10,8 @@
 
   - debug:
       msg: "Running for user: {{ ansible_user_id }}"
+
+  - include_tasks: common.yml
   
   - name: Add Nextcloud repository
     apt_repository:
@@ -23,67 +25,12 @@
       update_cache: yes
     become: true
     loop:
-      - ansible
-      - vim
-      - terminator
-      - htop
-      - gparted
       - gnome-tweaks
       - dconf-editor
-      - trash-cli
-      - apt-file
-      - curl
-      - build-essential
-      - k4dirstat
-      - python3-pip
-      - ffmpeg # For youtube-dl
-      - abcde
-      - nmap
-      - ncat
-      - nfs-common
-      - ecryptfs-utils
-      - wireshark
-      - git
-      - gitk
-      - mlocate
-      - binwalk
-      - fdupes
-      - alpine
-      - whois
-      - unrar
-      - tshark
-      - sqlite3
-      - screen
-      - python3-venv
-      - pv
-      - hexedit
-      - ipmitool
-      - tlp
       - nextcloud-client
-      - iotop
-      - cmake
-      - virt-manager
-      # - gettext      # Rhythmbox cover art browser
-      # - python3-lxml # Rhythmbox cover art browser
+      - tlp
       - lollypop
-      - checksec
-      - tmux
-      - llvm
-      - clang
-      - clang-tools
-      - docker.io
-      - audacity
-      - libavcodec-dev
-      - lame
-      - neofetch
       - indicator-multiload
-      - dos2unix
-      - nodejs
-      - npm
-      - default-jdk
-      - libstdc++-9-doc # libstdc++ man pages, e.g. man str:wstring
-      # manpages-dev # Provides Linux system calls and libc library calls, already installed
-      - smartmontools
 
   - name: Install snaps
     snap:
@@ -91,53 +38,11 @@
       state: present
     become: true
     loop:
-      - gimp
-      - keepassxc
-      - vlc
-      - scummvm
-      - spotify
       - snapcraft
       - multipass
       - lxd
       - openra
       # - cherrytree # Removed as doesn't yet support HiDPI. Building own.
-
-  - name: Add Google's Linux signing key
-    shell: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-    become: true
-
-  - name: Add Google Chrome repo
-    lineinfile:
-      path: /etc/apt/sources.list.d/google-chrome.list
-      create: yes
-      regexp: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-      line: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-    become: true
-
-  - name: Install Google Chrome
-    apt:
-      name: google-chrome-stable
-      state: present
-      update_cache: yes
-    become: true
-
-  - name: Download Visual Studio Code
-    get_url:
-      url: https://go.microsoft.com/fwlink/?LinkID=760868
-      dest: /tmp/vscode.deb
-
-  - name: Install Visual Studio Code
-    apt:
-      deb: /tmp/vscode.deb
-      state: present
-    become: true
-
-  # - name: Enable Firefox AppArmor profile (Creates problems with downloads)
-  #   shell: rm -f /etc/apparmor.d/disable/usr.bin.firefox && cat /etc/apparmor.d/usr.bin.firefox | sudo apparmor_parser -a
-  #   become: true
-
-        
-
 
   - name: Remove directories
     file:
@@ -160,6 +65,30 @@
       - { src: Nextcloud/.gnupg, dest: ~/.gnupg }
       - { src: Nextcloud/Pictures.RAW, dest: ~/Pictures.RAW }
     
+  - name: Spotify HiDPI fix
+    copy:
+      src: /snap/spotify/current/meta/gui/spotify.desktop
+      dest: ~/.local/share/applications/spotify.desktop
+      mode: +x
+
+  - name: Spotify HiDPI fix
+    lineinfile:
+      path: ~/.local/share/applications/spotify.desktop
+      regexp: "Icon="
+      line: "Icon=/snap/spotify/current/usr/share/spotify/icons/spotify-linux-128.png"
+
+  - name: Spotify HiDPI fix
+    lineinfile:
+      path: ~/.local/share/applications/spotify.desktop
+      regexp: "Exec="
+      line: "Exec=spotify --force-device-scale-factor=2.0 %U"
+
+  - name: Spotify HiDPI fix
+    lineinfile:
+      path: ~/.local/share/applications/spotify.desktop
+      regexp: "Name="
+      line: "Name=Spotify (HiDPI)"
+
   - name: Music sync cronjob
     cron:
       name: "music sync"
@@ -173,13 +102,6 @@
       minute: "0"
       hour: "*"
       job: "rsync -xav --delete --exclude=Wallpapers /home/{{ ansible_user_id }}/Pictures/ {{ ansible_user_id }}stor:media/pictures"
-
-  - name: Install pip packages
-    pip:
-      name:
-        - youtube-dl
-        - docker
-      extra_args: --user
 
   # - name: Disable touchstreen - x11 (doesn't work on Wayland)
   #   lineinfile:
@@ -210,53 +132,6 @@
       path: ~/.local/share/applications/spotify.desktop
       regexp: "Name="
       line: "Name=Spotify (HiDPI)"
-
-  - name: Install Visual Studio Code modules
-    shell: "code --install-extension {{ item }}"
-    loop:
-      - ms-python.python
-      - ms-vscode.cpptools
-      - ms-dotnettools.csharp
-      - redhat.java
-      - vscjava.vscode-java-debug
-      - ms-vscode.cmake-tools
-      - ms-azuretools.vscode-docker
-      - github.vscode-codeql
-      - thiagolciobittencourt.ubuntuvscode
-      - dbaeumer.vscode-eslint
-
-  - name: Add user groups
-    user:
-      name: "{{ ansible_user_id }}"
-      append: yes
-      groups: docker
-    become: true
-
-  - name: Download gdb GEF
-    shell: wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py
-  
-  - name: Install gdb GEF
-    lineinfile:
-      path: ~/.gdbinit
-      regexp: "source ~/.gdbinit-gef.py"
-      line: "source ~/.gdbinit-gef.py"
-
-  - name: Pull docker images
-    docker_image:
-      name: "{{ item }}"
-      source: pull
-    loop:
-      - aflplusplus/aflplusplus
-
-  - name: Get node.js packages
-    npm:
-      name: "{{ item }}"
-      state: present
-      global: no
-      path: /tmp
-    loop:
-      - yo
-      - generator-code
 
 # Semmle
 # Add PATH=$PATH:$HOME/codeql-home/codeql-cli to .profile

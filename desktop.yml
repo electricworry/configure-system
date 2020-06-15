@@ -1,0 +1,44 @@
+# Configuration for desktop (Linux Mint 20)
+# Run with ansible-playbook ~/projects/configure-system/desktop.yml --ask-become-pass
+
+---
+- name: My stuff
+  hosts: localhost
+  connection: local
+
+  tasks:
+
+  - debug:
+      msg: "Running for user: {{ ansible_user_id }}"
+  
+  - name: Enable snaps
+    stat: path=/etc/apt/preferences.d/nosnap.pref
+    register: snap_stat
+    become: true
+  
+  - name: Enable snaps
+    command: mv /etc/apt/preferences.d/nosnap.pref /etc/apt/preferences.d/nosnap.pref.bak
+    become: true
+    when: snap_stat.stat.exists
+
+  - name: Install snapd
+    apt:
+      name: snapd
+      state: present
+      update_cache: yes
+    become: true
+
+  - include_tasks: common.yml
+  
+  - name: Install snaps
+    snap:
+      name: "{{ item }}"
+      state: present
+    become: true
+    loop:
+      - cherrytree
+
+  # - name: Add Nextcloud repository
+  #   apt_repository:
+  #     repo: 'ppa:nextcloud-devs/client'
+  #   become: true

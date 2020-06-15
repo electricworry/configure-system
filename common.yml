@@ -1,0 +1,171 @@
+# Common configuration
+
+---
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  become: true
+  loop:
+    - ansible
+    - vim
+    - terminator
+    - htop
+    - gparted
+    - trash-cli
+    - apt-file
+    - curl
+    - build-essential
+    - k4dirstat
+    - python3-pip
+    - ffmpeg # For youtube-dl
+    - abcde
+    - nmap
+    - ncat
+    - nfs-common
+    - ecryptfs-utils
+    - wireshark
+    - git
+    - gitk
+    - mlocate
+    - binwalk
+    - fdupes
+    - alpine
+    - whois
+    - unrar
+    - tshark
+    - sqlite3
+    - screen
+    - python3-venv
+    - pv
+    - hexedit
+    - ipmitool
+    - iotop
+    - cmake
+    - virt-manager
+    # - gettext      # Rhythmbox cover art browser
+    # - python3-lxml # Rhythmbox cover art browser
+    - checksec
+    - tmux
+    - llvm
+    - clang
+    - clang-tools
+    - docker.io
+    - audacity
+    - libavcodec-dev
+    - lame
+    - neofetch
+    - dos2unix
+    - nodejs
+    - npm
+    - default-jdk
+    - libstdc++-9-doc # libstdc++ man pages, e.g. man str:wstring
+    # manpages-dev # Provides Linux system calls and libc library calls, already installed
+    - smartmontools
+
+- name: Install snaps
+  snap:
+    name: "{{ item }}"
+    state: present
+  become: true
+  loop:
+    - gimp
+    - keepassxc
+    - vlc
+    - scummvm
+    - spotify
+
+- name: Add Google's Linux signing key
+  shell: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  become: true
+
+- name: Add Google Chrome repo
+  lineinfile:
+    path: /etc/apt/sources.list.d/google-chrome.list
+    create: yes
+    regexp: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    line: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+  become: true
+
+- name: Install Google Chrome
+  apt:
+    name: google-chrome-stable
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Download Visual Studio Code
+  get_url:
+    url: https://go.microsoft.com/fwlink/?LinkID=760868
+    dest: /tmp/vscode.deb
+
+- name: Install Visual Studio Code
+  apt:
+    deb: /tmp/vscode.deb
+    state: present
+  become: true
+
+# - name: Enable Firefox AppArmor profile (Creates problems with downloads)
+#   shell: rm -f /etc/apparmor.d/disable/usr.bin.firefox && cat /etc/apparmor.d/usr.bin.firefox | sudo apparmor_parser -a
+#   become: true
+
+- name: Add user groups
+  user:
+    name: "{{ ansible_user_id }}"
+    append: yes
+    groups: docker
+  become: true
+
+# Below are user changes only
+
+- name: Install pip packages
+  pip:
+    name:
+      - youtube-dl
+      - docker
+    extra_args: --user
+
+- name: Install Visual Studio Code modules
+  shell: "code --install-extension {{ item }}"
+  loop:
+    - ms-python.python
+    - ms-vscode.cpptools
+    - ms-dotnettools.csharp
+    - redhat.java
+    - vscjava.vscode-java-debug
+    - ms-vscode.cmake-tools
+    - ms-azuretools.vscode-docker
+    - github.vscode-codeql
+    - thiagolciobittencourt.ubuntuvscode
+    - dbaeumer.vscode-eslint
+
+- name: Download gdb GEF
+  shell: wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py
+
+- name: Install gdb GEF
+  lineinfile:
+    path: ~/.gdbinit
+    state: present
+    create: true
+    regexp: "source ~/.gdbinit-gef.py"
+    line: "source ~/.gdbinit-gef.py"
+
+- name: Get node.js packages
+  npm:
+    name: "{{ item }}"
+    state: present
+    global: no
+    path: /tmp
+  loop:
+    - yo
+    - generator-code
+
+  # Fails before restart as user mod not applied yet.
+  # - name: Pull docker images
+  #   docker_image:
+  #     name: "{{ item }}"
+  #     source: pull
+  #   loop:
+  #     - aflplusplus/aflplusplus
+  
