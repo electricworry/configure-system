@@ -77,6 +77,13 @@
       - lame
       - neofetch
       - indicator-multiload
+      - dos2unix
+      - nodejs
+      - npm
+      - default-jdk
+      - libstdc++-9-doc # libstdc++ man pages, e.g. man str:wstring
+      # manpages-dev # Provides Linux system calls and libc library calls, already installed
+      - smartmontools
 
   - name: Install snaps
     snap:
@@ -216,6 +223,7 @@
       - ms-azuretools.vscode-docker
       - github.vscode-codeql
       - thiagolciobittencourt.ubuntuvscode
+      - dbaeumer.vscode-eslint
 
   - name: Add user groups
     user:
@@ -239,6 +247,16 @@
       source: pull
     loop:
       - aflplusplus/aflplusplus
+
+  - name: Get node.js packages
+    npm:
+      name: "{{ item }}"
+      state: present
+      global: no
+      path: /tmp
+    loop:
+      - yo
+      - generator-code
 
 # Semmle
 # Add PATH=$PATH:$HOME/codeql-home/codeql-cli to .profile
