@@ -30,12 +30,26 @@
 
   - include_tasks: common.yml
   
+  - name: Add Nextcloud repository
+    shell: add-apt-repository -y ppa:nextcloud-devs/client
+    become: true
+
+  - name: Install packages
+    apt:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    become: true
+    loop:
+      - nextcloud-client
+
   - name: Install snaps
     snap:
       name: "{{ item }}"
       state: present
     become: true
     loop:
+      - openra
       - cherrytree
 
   # - name: Add Nextcloud repository
