@@ -64,12 +64,21 @@
     # manpages-dev # Provides Linux system calls and libc library calls, already installed
     - smartmontools
 
+- name: Install snapcraft
+  snap:
+    name: snapcraft
+    state: present
+    classic: true
+  become: true
+  
 - name: Install snaps
   snap:
     name: "{{ item }}"
     state: present
   become: true
   loop:
+    - multipass
+    - lxd
     - gimp
     - keepassxc
     - vlc

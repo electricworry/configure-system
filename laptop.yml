@@ -38,9 +38,6 @@
       state: present
     become: true
     loop:
-      - snapcraft
-      - multipass
-      - lxd
       - openra
       # - cherrytree # Removed as doesn't yet support HiDPI. Building own.
 
@@ -65,30 +62,6 @@
       - { src: Nextcloud/.gnupg, dest: ~/.gnupg }
       - { src: Nextcloud/Pictures.RAW, dest: ~/Pictures.RAW }
     
-  - name: Spotify HiDPI fix
-    copy:
-      src: /snap/spotify/current/meta/gui/spotify.desktop
-      dest: ~/.local/share/applications/spotify.desktop
-      mode: +x
-
-  - name: Spotify HiDPI fix
-    lineinfile:
-      path: ~/.local/share/applications/spotify.desktop
-      regexp: "Icon="
-      line: "Icon=/snap/spotify/current/usr/share/spotify/icons/spotify-linux-128.png"
-
-  - name: Spotify HiDPI fix
-    lineinfile:
-      path: ~/.local/share/applications/spotify.desktop
-      regexp: "Exec="
-      line: "Exec=spotify --force-device-scale-factor=2.0 %U"
-
-  - name: Spotify HiDPI fix
-    lineinfile:
-      path: ~/.local/share/applications/spotify.desktop
-      regexp: "Name="
-      line: "Name=Spotify (HiDPI)"
-
   - name: Music sync cronjob
     cron:
       name: "music sync"
