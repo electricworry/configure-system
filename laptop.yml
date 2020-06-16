@@ -41,6 +41,12 @@
       - openra
       # - cherrytree # Removed as doesn't yet support HiDPI. Building own.
 
+##
+##
+## Personal customisations follow...
+##
+##
+
   - name: Remove directories
     file:
       path:  "{{ item }}"
@@ -114,4 +120,5 @@
 # Enable livepatch
 # Install Beyond Compare
 # sudo dpkg-reconfigure wireshark-common (enable wireshark group)
+# Add user to wireshark group
 # Extract android-studio-ide and run to download additional components

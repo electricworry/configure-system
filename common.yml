@@ -195,7 +195,7 @@
     - yo
     - generator-code
 
-  # Fails before restart as user mod not applied yet.
+  # I want to pull various useful docker images, but this fails until the session is restarted (usermod not taken effect yet).
   # - name: Pull docker images
   #   docker_image:
   #     name: "{{ item }}"

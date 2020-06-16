@@ -54,6 +54,12 @@
       - openra
       - cherrytree
 
+##
+##
+## Personal customisations follow...
+##
+##
+
   - name: Remove directories
     file:
       path:  "{{ item }}"
@@ -89,3 +95,12 @@
       - libgtk-3-dev
       - libsqlite3-dev
   
+# Semmle
+# Add PATH=$PATH:$HOME/codeql-home/codeql-cli to .profile
+
+# Manual Tasks
+# Set up dejadup to NAS
+# Install Beyond Compare
+# sudo dpkg-reconfigure wireshark-common (enable wireshark group)
+# Add user to wireshark group
+# Extract android-studio-ide and run to download additional components
