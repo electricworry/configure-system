@@ -128,10 +128,18 @@
     update_cache: yes
   become: true
 
-
 # - name: Enable Firefox AppArmor profile (Creates problems with downloads)
 #   shell: rm -f /etc/apparmor.d/disable/usr.bin.firefox && cat /etc/apparmor.d/usr.bin.firefox | sudo apparmor_parser -a
 #   become: true
+
+- name: Redirect root email to user
+  lineinfile:
+    path: /root/.forward
+    state: present
+    create: true
+    regexp: ".*"
+    line: "{{ ansible_user_id }}"
+  become: true
 
 - name: Add user groups
   user:
