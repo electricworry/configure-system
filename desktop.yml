@@ -42,6 +42,8 @@
     become: true
     loop:
       - nextcloud-client
+      - ssh
+      - deja-dup
 
   - name: Install snaps
     snap:
@@ -52,7 +54,38 @@
       - openra
       - cherrytree
 
-  # - name: Add Nextcloud repository
-  #   apt_repository:
-  #     repo: 'ppa:nextcloud-devs/client'
-  #   become: true
+  - name: Remove directories
+    file:
+      path:  "{{ item }}"
+      state: absent
+    loop:
+      - ~/Pictures
+      - ~/Documents
+      - ~/Videos
+
+  - name: Create symlinks
+    file:
+      src:  "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      state: link
+    loop:
+      - { src: Nextcloud/Pictures, dest: ~/Pictures }
+      - { src: Nextcloud/Documents, dest: ~/Documents }
+      - { src: Nextcloud/Videos, dest: ~/Videos }
+      - { src: Nextcloud/.gnupg, dest: ~/.gnupg }
+
+  - name: FileZilla dependencies
+    apt:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    become: true
+    loop:
+      - libtool
+      - nettle-dev
+      - libgnutls28-dev
+      - libwxgtk3.0-gtk3-dev
+      - libpugixml-dev
+      - libgtk-3-dev
+      - libsqlite3-dev
+  
