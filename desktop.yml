@@ -44,6 +44,7 @@
       - nextcloud-client
       - ssh
       - deja-dup
+      - command-not-found # Removed by Mint probably because of the snap fiasco
 
   - name: Install snaps
     snap:
