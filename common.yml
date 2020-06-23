@@ -64,6 +64,7 @@
     - libstdc++-9-doc # libstdc++ man pages, e.g. man str:wstring
     # manpages-dev # Provides Linux system calls and libc library calls, already installed
     - smartmontools
+    - cython3
 
 - name: Install snapcraft
   snap:
