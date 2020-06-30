@@ -3,68 +3,71 @@
 ---
 - name: Install packages
   apt:
-    name: "{{ item }}"
+    name:
+      - ansible
+      - vim
+      - terminator
+      - htop
+      - gparted
+      - trash-cli
+      - apt-file
+      - curl
+      - build-essential
+      - k4dirstat
+      - python3-pip
+      - ffmpeg # For youtube-dl
+      - abcde
+      - nmap
+      - ncat
+      - nfs-common
+      - ecryptfs-utils
+      - wireshark
+      - git
+      - gitk
+      - subversion
+      - mlocate
+      - binwalk
+      - fdupes
+      - alpine
+      - whois
+      - unrar
+      - tshark
+      - sqlite3
+      - screen
+      - python3-venv
+      - pv
+      - hexedit
+      - ipmitool
+      - iotop
+      - cmake
+      - virt-manager
+      # - gettext      # Rhythmbox cover art browser
+      # - python3-lxml # Rhythmbox cover art browser
+      - checksec
+      - tmux
+      - llvm
+      - clang
+      - clang-tools
+      - docker.io
+      - audacity
+      - libavcodec-dev
+      - lame
+      - neofetch
+      - dos2unix
+      - nodejs
+      - npm
+      - default-jdk
+      - libstdc++-9-doc # libstdc++ man pages, e.g. man str:wstring
+      # manpages-dev # Provides Linux system calls and libc library calls, already installed
+      - smartmontools
+      - cython3
+      - apktool
+      - texinfo
+      - help2man
+      - libtool-bin
     state: present
     update_cache: yes
   become: true
-  loop:
-    - ansible
-    - vim
-    - terminator
-    - htop
-    - gparted
-    - trash-cli
-    - apt-file
-    - curl
-    - build-essential
-    - k4dirstat
-    - python3-pip
-    - ffmpeg # For youtube-dl
-    - abcde
-    - nmap
-    - ncat
-    - nfs-common
-    - ecryptfs-utils
-    - wireshark
-    - git
-    - gitk
-    - subversion
-    - mlocate
-    - binwalk
-    - fdupes
-    - alpine
-    - whois
-    - unrar
-    - tshark
-    - sqlite3
-    - screen
-    - python3-venv
-    - pv
-    - hexedit
-    - ipmitool
-    - iotop
-    - cmake
-    - virt-manager
-    # - gettext      # Rhythmbox cover art browser
-    # - python3-lxml # Rhythmbox cover art browser
-    - checksec
-    - tmux
-    - llvm
-    - clang
-    - clang-tools
-    - docker.io
-    - audacity
-    - libavcodec-dev
-    - lame
-    - neofetch
-    - dos2unix
-    - nodejs
-    - npm
-    - default-jdk
-    - libstdc++-9-doc # libstdc++ man pages, e.g. man str:wstring
-    # manpages-dev # Provides Linux system calls and libc library calls, already installed
-    - smartmontools
-    - cython3
 
 - name: Install snapcraft
   snap:
@@ -75,17 +78,16 @@
   
 - name: Install snaps
   snap:
-    name: "{{ item }}"
+    name:
+      - multipass
+      - lxd
+      - gimp
+      - keepassxc
+      - vlc
+      - scummvm
+      - spotify
     state: present
   become: true
-  loop:
-    - multipass
-    - lxd
-    - gimp
-    - keepassxc
-    - vlc
-    - scummvm
-    - spotify
 
 - name: Add Google's Linux signing key
   shell: wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -106,16 +108,15 @@
     update_cache: yes
   become: true
 
-- name: Download Visual Studio Code
-  get_url:
-    url: https://go.microsoft.com/fwlink/?LinkID=760868
-    dest: /tmp/vscode.deb
+- name: Check whether vscode exists or not
+  stat:
+    path: /usr/bin/code
+  register: stat_code
 
 - name: Install Visual Studio Code
   apt:
-    deb: /tmp/vscode.deb
-    state: present
-  become: true
+    deb: https://go.microsoft.com/fwlink/?LinkID=760868
+  when: not stat_code.stat.exists
 
 - name: Install Microsoft Packages
   apt:
@@ -195,6 +196,47 @@
   loop:
     - yo
     - generator-code
+
+- name: Check whether crosstool-ng exists or not
+  stat:
+    path: ~/crosstool-ng-1.24.0
+  register: stat_crosstool
+
+- name: Download crosstool-ng
+  get_url:
+    url: "{{ item }}"
+    dest: /tmp
+  loop:
+    - http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.24.0.tar.xz
+    - http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.24.0.tar.xz.sig
+  when: not stat_crosstool.stat.exists
+
+- name: Add crosstool-ng to path
+  lineinfile:
+    path: ~/.bashrc
+    regexp: "export PATH=$PATH:~/crosstool-ng-1.24.0"
+    line: "export PATH=$PATH:~/crosstool-ng-1.24.0"
+
+- name: Create crosstool-ng src storage directory
+  file:
+    path: ~/src
+    state: directory
+
+- name: Get crosstool-ng keys
+  shell: gpg --recv-keys 64AAFBF214758C63409345F97848649B11D618A4
+  when: not stat_crosstool.stat.exists
+
+- name: Verify crosstool-ng download and extract
+  shell: gpg --verify crosstool-ng-1.24.0.tar.xz.sig && tar -C ~ -xf crosstool-ng-1.24.0.tar.xz
+  args:
+    chdir: /tmp
+  when: not stat_crosstool.stat.exists
+
+- name: Build crosstool-ng
+  shell: ./configure --enable-local && make
+  args:
+    chdir: ~/crosstool-ng-1.24.0
+  when: not stat_crosstool.stat.exists
 
   # I want to pull various useful docker images, but this fails until the session is restarted (usermod not taken effect yet).
   # - name: Pull docker images

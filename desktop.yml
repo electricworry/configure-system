@@ -36,25 +36,23 @@
 
   - name: Install packages
     apt:
-      name: "{{ item }}"
+      name:
+        - nextcloud-client
+        - ssh
+        - deja-dup
+        - command-not-found # Removed by Mint probably because of the snap fiasco?
+        - steam
       state: present
       update_cache: yes
     become: true
-    loop:
-      - nextcloud-client
-      - ssh
-      - deja-dup
-      - command-not-found # Removed by Mint probably because of the snap fiasco?
-      - steam
 
   - name: Install snaps
     snap:
-      name: "{{ item }}"
+      name:
+        - openra
+        - cherrytree
       state: present
     become: true
-    loop:
-      - openra
-      - cherrytree
 
 ##
 ##
@@ -84,18 +82,17 @@
 
   - name: FileZilla dependencies
     apt:
-      name: "{{ item }}"
+      name:
+        - libtool
+        - nettle-dev
+        - libgnutls28-dev
+        - libwxgtk3.0-gtk3-dev
+        - libpugixml-dev
+        - libgtk-3-dev
+        - libsqlite3-dev
       state: present
       update_cache: yes
     become: true
-    loop:
-      - libtool
-      - nettle-dev
-      - libgnutls28-dev
-      - libwxgtk3.0-gtk3-dev
-      - libpugixml-dev
-      - libgtk-3-dev
-      - libsqlite3-dev
   
 # Semmle
 # Add PATH=$PATH:$HOME/codeql-home/codeql-cli to .profile
