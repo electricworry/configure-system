@@ -211,12 +211,6 @@
     - http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-1.24.0.tar.xz.sig
   when: not stat_crosstool.stat.exists
 
-- name: Add crosstool-ng to path
-  lineinfile:
-    path: ~/.bashrc
-    regexp: "export PATH=$PATH:~/crosstool-ng-1.24.0"
-    line: "export PATH=$PATH:~/crosstool-ng-1.24.0"
-
 - name: Create crosstool-ng src storage directory
   file:
     path: ~/src
@@ -237,6 +231,12 @@
   args:
     chdir: ~/crosstool-ng-1.24.0
   when: not stat_crosstool.stat.exists
+
+- name: Add crosstool-ng to path
+  lineinfile:
+    path: ~/.bashrc
+    regexp: "export PATH=$PATH:~/crosstool-ng-1.24.0"
+    line: "export PATH=$PATH:~/crosstool-ng-1.24.0"
 
   # I want to pull various useful docker images, but this fails until the session is restarted (usermod not taken effect yet).
   # - name: Pull docker images
