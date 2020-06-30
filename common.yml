@@ -65,6 +65,7 @@
       - texinfo
       - help2man
       - libtool-bin
+      - flex
     state: present
     update_cache: yes
   become: true
@@ -246,4 +247,4 @@
   #     source: pull
   #   loop:
   #     - aflplusplus/aflplusplus
-  
+

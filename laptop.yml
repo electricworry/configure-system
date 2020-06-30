@@ -20,26 +20,26 @@
 
   - name: Install packages
     apt:
-      name: "{{ item }}"
+      name:
+        - gnome-tweaks
+        - dconf-editor
+        - nextcloud-client
+        - tlp
+        - lollypop
+        - indicator-multiload
       state: present
       update_cache: yes
     become: true
     loop:
-      - gnome-tweaks
-      - dconf-editor
-      - nextcloud-client
-      - tlp
-      - lollypop
-      - indicator-multiload
 
   - name: Install snaps
     snap:
-      name: "{{ item }}"
+      name:
+        - openra
+        # - cherrytree # Removed as doesn't yet support HiDPI. Building own.
       state: present
     become: true
     loop:
-      - openra
-      # - cherrytree # Removed as doesn't yet support HiDPI. Building own.
 
 ##
 ##
