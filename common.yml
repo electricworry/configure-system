@@ -175,6 +175,7 @@
     - github.vscode-codeql
     - thiagolciobittencourt.ubuntuvscode
     - dbaeumer.vscode-eslint
+    - vscjava.vscode-java-pack
 
 - name: Download gdb GEF
   shell: wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py
