@@ -252,6 +252,59 @@
     regexp: "export PATH=$PATH:~/crosstool-ng-1.24.0"
     line: "export PATH=$PATH:~/crosstool-ng-1.24.0"
 
+- name: Create project directory (I like a project directory)
+  file:
+    path: ~/projects
+    state: directory
+
+- name: Clone AFLplusplus
+  git:
+    repo: https://github.com/AFLplusplus/AFLplusplus.git
+    dest: ~/projects/AFLplusplus
+    version: 2.66c
+
+- name: Build afl
+  shell: make source-only
+  args:
+    chdir: ~/projects/AFLplusplus
+
+- name: Create afl symlinks
+  file:
+    src:  "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop:
+    - { src: Nextcloud/Pictures, dest: ~/Pictures }
+    - { src: Nextcloud/Documents, dest: ~/Documents }
+    - { src: Nextcloud/Videos, dest: ~/Videos }
+    - { src: Nextcloud/.gnupg, dest: ~/.gnupg }
+
+- name: Add afl to path
+  lineinfile:
+    path: ~/.bashrc
+    regexp: "export PATH=$PATH:~/projects/AFLplusplus"
+    line: "export PATH=$PATH:~/projects/AFLplusplus"
+
+- name: Add afl to path
+  lineinfile:
+    path: ~/.bashrc
+    regexp: "export AFL_PATH=~/projects/AFLplusplus"
+    line: "export AFL_PATH=~/projects/AFLplusplus"
+
+- name: Create local bin directory
+  file:
+    path: ~/.local/bin/
+    state: directory
+
+- name: Create afl-init script
+  copy:
+    content: |
+      #!/bin/bash
+      echo core | sudo tee /proc/sys/kernel/core_pattern
+      echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+    dest: ~/.local/bin/afl-init
+    mode: '0755'
+
   # I want to pull various useful docker images, but this fails until the session is restarted (usermod not taken effect yet).
   # - name: Pull docker images
   #   docker_image:
