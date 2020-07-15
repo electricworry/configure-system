@@ -84,6 +84,7 @@
 # Add PATH=$PATH:$HOME/codeql-home/codeql-cli to .profile
 
 # Manual Tasks
+# Install IDA Pro
 # Set up dejadup to NAS
 # Install Beyond Compare
 # sudo dpkg-reconfigure wireshark-common (enable wireshark group)
