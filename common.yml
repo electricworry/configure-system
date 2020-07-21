@@ -134,6 +134,7 @@
 - name: Install Visual Studio Code
   apt:
     deb: https://go.microsoft.com/fwlink/?LinkID=760868
+  become: true
   when: not stat_code.stat.exists
 
 - name: Install Microsoft Packages
@@ -170,6 +171,15 @@
   loop:
     - docker
     - lxd
+
+- name: Wine winepath symlink (AFLplusplus fix)
+  file:
+    src:  "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+  loop:
+    - { src: /usr/bin/winepath, dest: /usr/lib/wine/winepath }
+  become: true
 
 # Below are user changes only
 
