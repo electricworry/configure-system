@@ -13,6 +13,7 @@
       - apt-file
       - curl
       - build-essential
+      - gcc-multilib
       - k4dirstat
       - python3-pip
       - ffmpeg # For youtube-dl
