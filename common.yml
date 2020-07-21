@@ -83,6 +83,8 @@
       - libtalloc-dev # For freeradius build
       - libkqueue-dev # For freeradius build
       - figlet
+      - wine # For afl wine mode
+      - bison # Required for AFLplusplus QEMU build
 
     state: present
     update_cache: yes
