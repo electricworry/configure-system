@@ -271,7 +271,7 @@
     version: 2.66c
 
 - name: Build afl
-  shell: make source-only
+  shell: CPU_TARGET=i386 make distrib
   args:
     chdir: ~/projects/AFLplusplus
 
