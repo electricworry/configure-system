@@ -61,6 +61,7 @@
       # manpages-dev # Provides Linux system calls and libc library calls, already installed
       - smartmontools
       - cython3
+      - checkinstall
       - apktool # For android reversing
       - texinfo # For crosstool-ng
       - help2man # For crosstool-ng
@@ -78,6 +79,8 @@
       - libgtk-3-dev # For filezilla build
       - libsqlite3-dev # For filezilla build
       - easy-rsa # For openvpn key management
+      - libtalloc-dev # For freeradius build
+      - libkqueue-dev # For freeradius build
 
     state: present
     update_cache: yes
@@ -174,6 +177,7 @@
     name:
       - youtube-dl
       - docker
+      - scapy
     extra_args: --user
 
 - name: Install Visual Studio Code modules
@@ -212,6 +216,7 @@
   loop:
     - yo
     - generator-code
+    - vsce
 
 - name: Check whether crosstool-ng exists or not
   stat:
