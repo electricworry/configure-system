@@ -275,17 +275,6 @@
   args:
     chdir: ~/projects/AFLplusplus
 
-- name: Create afl symlinks
-  file:
-    src:  "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    state: link
-  loop:
-    - { src: Nextcloud/Pictures, dest: ~/Pictures }
-    - { src: Nextcloud/Documents, dest: ~/Documents }
-    - { src: Nextcloud/Videos, dest: ~/Videos }
-    - { src: Nextcloud/.gnupg, dest: ~/.gnupg }
-
 - name: Add afl to path
   lineinfile:
     path: ~/.bashrc
