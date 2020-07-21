@@ -82,6 +82,7 @@
       - easy-rsa # For openvpn key management
       - libtalloc-dev # For freeradius build
       - libkqueue-dev # For freeradius build
+      - figlet
 
     state: present
     update_cache: yes
