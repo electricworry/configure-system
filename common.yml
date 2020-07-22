@@ -192,6 +192,7 @@
       - youtube-dl
       - docker
       - scapy
+      - pefile # Required for AFLplusplus wine mode
     extra_args: --user
 
 - name: Install Visual Studio Code modules
@@ -301,6 +302,12 @@
     regexp: "export AFL_PATH=~/projects/AFLplusplus"
     line: "export AFL_PATH=~/projects/AFLplusplus"
 
+- name: Set AFL wine path
+  lineinfile:
+    path: ~/.bashrc
+    regexp: "export AFL_WINE_PATH=/usr/lib/wine/wine"
+    line: "export AFL_WINE_PATH=/usr/lib/wine/wine"
+  
 - name: Create local bin directory
   file:
     path: ~/.local/bin/
