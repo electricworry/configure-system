@@ -281,9 +281,9 @@
 
 - name: Clone AFLplusplus
   git:
-    repo: https://github.com/AFLplusplus/AFLplusplus.git
+    repo: https://github.com/electricworry/AFLplusplus.git
     dest: ~/projects/AFLplusplus
-    version: 2.66c
+    version: wine-fix
 
 - name: Build afl
   shell: CPU_TARGET=i386 make distrib
