@@ -50,6 +50,7 @@
       - clang
       - clang-tools
       - docker.io
+      - docker-compose
       - audacity
       - libavcodec-dev
       - lame
@@ -84,7 +85,9 @@
       - libkqueue-dev # For freeradius build
       - figlet
       - wine # For afl wine mode
+      - wine64
       - bison # Required for AFLplusplus QEMU build
+      - chrpath # for yocto builds
 
     state: present
     update_cache: yes
@@ -182,6 +185,17 @@
     state: link
   loop:
     - { src: /usr/bin/winepath, dest: /usr/lib/wine/winepath }
+  become: true
+
+- name: Increase max_user_watches
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: "fs.inotify.max_user_watches"
+    line: "fs.inotify.max_user_watches = 524288"
+  become: true
+
+- name: Increase max_user_watches
+  shell: sysctl -p
   become: true
 
 # Below are user changes only
