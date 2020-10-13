@@ -88,6 +88,8 @@
       - wine64
       - bison # Required for AFLplusplus QEMU build
       - chrpath # for yocto builds
+      - awscli # For AWS management, obvs
+      - icedtea-netx
 
     state: present
     update_cache: yes
