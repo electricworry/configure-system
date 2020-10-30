@@ -227,6 +227,7 @@
     - vscjava.vscode-java-pack
     - ms-vscode.hexeditor
     - ms-vscode-remote.remote-ssh
+    - ms-vscode-remote.remote-containers
 
 - name: Download gdb GEF
   shell: wget -O ~/.gdbinit-gef.py -q https://github.com/hugsy/gef/raw/master/gef.py
