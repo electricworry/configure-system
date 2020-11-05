@@ -27,6 +27,7 @@
         - tlp
         - lollypop
         - indicator-multiload
+        - nvme-cli
       state: present
       update_cache: yes
     become: true
