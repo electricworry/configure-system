@@ -91,6 +91,7 @@
       - awscli # For AWS management, obvs
       - icedtea-netx # For server remote console
       - brasero # For optical media writing
+      - python-is-python3 # Python 2 is dead
 
     state: present
     update_cache: yes
