@@ -115,6 +115,7 @@
       - vlc
       - scummvm
       - spotify
+      - picard
     state: present
   become: true
 
