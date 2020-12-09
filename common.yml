@@ -93,6 +93,7 @@
       - brasero # For optical media writing
       - python-is-python3 # Python 2 is dead
       - python3-libclang # Python bindings for clang
+      - meson # Build tool
 
     state: present
     update_cache: yes
