@@ -92,7 +92,7 @@
       - icedtea-netx # For server remote console
       - brasero # For optical media writing
       - python-is-python3 # Python 2 is dead
-      - python3-libclang # Python bindings for clang
+      - python3-clang # Python bindings for clang
       - meson # Build tool
 
     state: present
@@ -203,6 +203,14 @@
 
 - name: Increase max_user_watches
   shell: sysctl -p
+  become: true
+
+- name: Pull docker images
+  docker_image:
+    name: "{{ item }}"
+    source: pull
+  loop:
+    - aflplusplus/aflplusplus
   become: true
 
 # Below are user changes only
@@ -346,12 +354,3 @@
       echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
     dest: ~/.local/bin/afl-init
     mode: '0755'
-
-  # I want to pull various useful docker images, but this fails until the session is restarted (usermod not taken effect yet).
-  # - name: Pull docker images
-  #   docker_image:
-  #     name: "{{ item }}"
-  #     source: pull
-  #   loop:
-  #     - aflplusplus/aflplusplus
-
