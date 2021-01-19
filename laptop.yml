@@ -26,7 +26,7 @@
         - nextcloud-client
         - tlp
         - lollypop
-        - indicator-multiload
+        # - indicator-multiload
         - nvme-cli
       state: present
       update_cache: yes
