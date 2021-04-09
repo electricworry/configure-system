@@ -95,6 +95,7 @@
       - python3-clang # Python bindings for clang
       - meson # Build tool
       - flac
+      - ncdu
     state: present
     update_cache: yes
   become: true
