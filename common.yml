@@ -216,6 +216,11 @@
 
 # Below are user changes only
 
+- name: Create project directory
+  file:
+    path: ~/projects
+    state: directory
+
 - name: Install pip packages
   pip:
     name:
@@ -236,6 +241,13 @@
     src: https://github.com/github/codeql/archive/refs/tags/v1.27.0.zip
     dest: ~/
     remote_src: yes
+
+- name: Download vscode-codeql-starter
+  git:
+    repo: https://github.com/github/vscode-codeql-starter.git
+    dest: ~/projects/vscode-codeql-starter
+    recursive: true
+    force: false
 
 - name: Add codeql to path
   lineinfile:
@@ -327,11 +339,6 @@
     path: ~/.bashrc
     regexp: "export PATH=$PATH:~/crosstool-ng-1.24.0"
     line: "export PATH=$PATH:~/crosstool-ng-1.24.0"
-
-- name: Create project directory (I like a project directory)
-  file:
-    path: ~/projects
-    state: directory
 
 - name: Clone AFLplusplus
   git:
