@@ -225,6 +225,27 @@
       - pefile # Required for AFLplusplus wine mode
     extra_args: --user
 
+- name: Download codeql-cli
+  unarchive:
+    src: https://github.com/github/codeql-cli-binaries/releases/download/v2.4.6/codeql-linux64.zip
+    dest: ~/
+    remote_src: yes
+
+- name: Download codeql libraries
+  unarchive:
+    src: https://github.com/github/codeql/archive/refs/tags/v1.27.0.zip
+    dest: ~/
+    remote_src: yes
+
+- name: Add codeql to path
+  lineinfile:
+    path: ~/.bashrc
+    regexp: "export PATH=$PATH:~/codeql"
+    line: "export PATH=$PATH:~/codeql"
+
+- name: Resolve codeql qlpacks
+  shell: "~/codeql/codeql resolve qlpacks"
+
 - name: Install Visual Studio Code modules
   shell: "code --install-extension {{ item }}"
   loop:
