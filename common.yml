@@ -49,6 +49,11 @@
       - llvm
       - clang
       - clang-tools
+      - lld
+      - llvm-11
+      - clang-11
+      - clang-tools-11
+      - lld-11
       - docker.io
       - docker-compose
       - audacity
@@ -248,6 +253,7 @@
     dest: ~/projects/vscode-codeql-starter
     recursive: true
     force: false
+  ignore_errors: true
 
 - name: Add codeql to path
   lineinfile:
@@ -344,11 +350,12 @@
   git:
     repo: https://github.com/AFLplusplus/AFLplusplus.git
     dest: ~/projects/AFLplusplus
-    version: 2.68c
+    version: 3.12c
+    recursive: false
     force: true
 
 - name: Build afl
-  shell: CPU_TARGET=i386 make distrib
+  shell: CPU_TARGET=i386 CC=clang-11 CXX=clang++-11 LLVM_CONFIG=llvm-config-11 make distrib
   args:
     chdir: ~/projects/AFLplusplus
 
@@ -357,12 +364,6 @@
     path: ~/.bashrc
     regexp: "export PATH=$PATH:~/projects/AFLplusplus"
     line: "export PATH=$PATH:~/projects/AFLplusplus"
-
-- name: Add afl to path
-  lineinfile:
-    path: ~/.bashrc
-    regexp: "export AFL_PATH=~/projects/AFLplusplus"
-    line: "export AFL_PATH=~/projects/AFLplusplus"
 
 - name: Set AFL wine path
   lineinfile:
