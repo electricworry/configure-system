@@ -54,6 +54,7 @@
       - clang-11
       - clang-tools-11
       - lld-11
+      - gcc-9-plugin-dev # Required for AFL++ gcc-plugin mode
       - docker.io
       - docker-compose
       - audacity
