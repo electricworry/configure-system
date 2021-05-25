@@ -235,8 +235,9 @@
       - youtube-dl
       - docker
       - scapy
+      - ipython
       - pefile # Required for AFLplusplus wine mode
-    extra_args: --user
+    extra_args: --user --upgrade
 
 - name: Download codeql-cli
   unarchive:
