@@ -354,7 +354,7 @@
   git:
     repo: https://github.com/AFLplusplus/AFLplusplus.git
     dest: ~/projects/AFLplusplus
-    version: 3.12c
+    version: 3.13c
     recursive: false
     force: true
 
