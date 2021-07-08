@@ -54,9 +54,15 @@
       - clang-11
       - clang-tools-11
       - lld-11
+      - llvm-12
+      - clang-12
+      - clang-tools-12
+      - lld-12
       - gcc-9-plugin-dev # Required for AFL++ gcc-plugin mode
       - libc++-11-dev    # Required for AFL++ LTO mode
       - libc++abi-11-dev # Required for AFL++ LTO mode
+      - libc++-12-dev    # Required for AFL++ LTO mode
+      - libc++abi-12-dev # Required for AFL++ LTO mode
       - docker.io
       - docker-compose
       - audacity
@@ -359,7 +365,7 @@
     force: true
 
 - name: Build afl
-  shell: CPU_TARGET=i386 CC=clang-11 CXX=clang++-11 LLVM_CONFIG=llvm-config-11 make distrib
+  shell: CPU_TARGET=i386 CC=clang-12 CXX=clang++-12 LLVM_CONFIG=llvm-config-12 make distrib
   args:
     chdir: ~/projects/AFLplusplus
 
